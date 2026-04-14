@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Analysis Dashboard</h1>
+
+<div class="dashboard-grid">
+    <div class="glass-card stat-card">
+        <h3>Random Forest Accuracy</h3>
+        <div class="value">{{ metrics.overall_accuracy }}%</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">(Based on test evaluation)</div>
+    </div>
+    <div class="glass-card stat-card">
+        <h3>Valid Transactions</h3>
+        <div class="value" style="background: linear-gradient(135deg, #34d399, #10b981); -webkit-background-clip: text;">{{ metrics.real_percentage }}%</div>
+    </div>
+    <div class="glass-card stat-card">
+        <h3>Fraudulent Transactions</h3>
+        <div class="value" style="background: linear-gradient(135deg, #f87171, #ef4444); -webkit-background-clip: text;">{{ metrics.fraud_percentage }}%</div>
+    </div>
+    <div class="glass-card stat-card">
+        <h3>Failed Transactions</h3>
+        <div class="value" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text;">{{ metrics.failed_percentage }}%</div>
+    </div>
+</div>
+
+<div class="dashboard-grid" style="grid-template-columns: 1fr 2fr;">
+    <div class="glass-card">
+        <h3 style="margin-bottom: 1rem; color: var(--secondary)">Major Fraud Categories</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Categories mostly used by fraudsters to steal money:</p>
+        <ul class="categories-list">
+            {% for cat in metrics.major_categories %}
+            <li>{{ cat }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="glass-card">
+        <h3 style="margin-bottom: 1rem; color: var(--primary)">Recent Detections</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>UPI Number</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in history %}
+                    <tr>
+                        <td style="color: var(--text-muted)">{{ row.timestamp.split()[1] }}</td>
+                        <td>{{ row.upi_number }}</td>
+                        <td>₹{{ row.amount }}</td>
+                        <td>
+                            {% if 'Valid' in row.prediction or 'valid' in row.prediction %}
+                                <span class="badge badge-valid">Valid</span>
+                            {% elif 'Fraud' in row.prediction or 'fraud' in row.prediction %}
+                                <span class="badge badge-fraud">Fraud</span>
+                            {% else %}
+                                <span class="badge badge-failed">Failed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--text-muted)">No recent detections to display.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

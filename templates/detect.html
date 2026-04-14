@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card">
+    <h2 style="margin-bottom: 2rem; color: var(--secondary)">Real-Time Fraud Detection</h2>
+    
+    <form method="POST">
+        <div class="dashboard-grid" style="grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <!-- Row 1 -->
+            <div class="form-group">
+                <label>UPI Number</label>
+                <input type="text" name="upi_number" class="form-control" required placeholder="e.g. 9876543210@upi">
+            </div>
+            <div class="form-group">
+                <label>Account Holder Name</label>
+                <input type="text" name="account_holder" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Transaction Date & Time</label>
+                <input type="datetime-local" name="txn_datetime" class="form-control" required>
+            </div>
+            
+            <!-- Row 2 -->
+            <div class="form-group">
+                <label>Transaction Amount (₹)</label>
+                <input type="number" step="0.01" name="amount" class="form-control" required placeholder="e.g. 25000">
+            </div>
+            <div class="form-group">
+                <label>Seller Name</label>
+                <input type="text" name="seller_name" class="form-control" required>
+            </div>
+            
+            <!-- Row 3 -->
+            <div class="form-group">
+                <label>Transaction Category</label>
+                <select name="category" class="form-control" required>
+                    <option value="" disabled selected>Select Category</option>
+                    <option value="Food & Dining">Food & Dining</option>
+                    <option value="Groceries">Groceries</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="P2P Transfer">P2P Transfer</option>
+                    <option value="Utilities">Utilities</option>
+                    <option value="Travel/Transport">Travel/Transport</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Gaming/Entertainment">Gaming/Entertainment</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Device Type</label>
+                <select name="device_type" class="form-control" required>
+                    <option value="" disabled selected>Select Device</option>
+                    <option value="Mobile Web">Mobile Web</option>
+                    <option value="Native App Android">Native App Android</option>
+                    <option value="Native App iOS">Native App iOS</option>
+                    <option value="Desktop Web">Desktop Web</option>
+                    <option value="POS Terminal">POS Terminal</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Server Status Check</label>
+                <select name="server_status" class="form-control" required>
+                    <option value="Success" selected>Success (Network OK)</option>
+                    <option value="Wrong PIN">Wrong PIN</option>
+                    <option value="Timeout">Timeout (Offline)</option>
+                    <option value="Insufficient Funds">Insufficient Funds</option>
+                </select>
+            </div>
+        </div>
+        
+        <div style="margin-top: 1rem; max-width: 300px;">
+            <button type="submit" class="btn-primary">Detect Status</button>
+        </div>
+    </form>
+    
+    {% if prediction %}
+        {% if prediction == 'valid transaction' %}
+        <div class="result-box result-valid animate-pulse" id="result-box">
+            <h2><span style="font-size: 2rem;">✓</span> Valid Transaction</h2>
+            <p style="margin-top: 0.5rem; color: var(--text-muted)">The CNN model has determined this transaction is genuine and secure.</p>
+        </div>
+        {% elif prediction == 'fraud transaction' %}
+        <div class="result-box result-fraud animate-pulse" id="result-box">
+            <h2><span style="font-size: 2rem;">⚠</span> Fraud Transaction</h2>
+            <p style="margin-top: 0.5rem; color: var(--text-muted)">Alert: The CNN model detected suspicious patterns. Transaction should be declined.</p>
+        </div>
+        {% else %}
+        <div class="result-box result-failed animate-pulse" id="result-box">
+            <h2><span style="font-size: 2rem;">❌</span> Failed Transaction</h2>
+            <p style="margin-top: 0.5rem; color: var(--text-muted)">Blocked: The banking server rejected the transaction ({{ prediction }}).</p>
+        </div>
+        {% endif %}
+        
+        <!-- Script to scoll to result -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var el = document.getElementById('result-box');
+                if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+                
+                // Remove pulse after 2 seconds
+                setTimeout(() => el.classList.remove('animate-pulse'), 2000);
+            });
+        </script>
+    {% endif %}
+</div>
+{% endblock %}

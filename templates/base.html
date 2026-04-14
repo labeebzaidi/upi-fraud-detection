@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Fraud Detection</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-container">
+        {% if session.get('logged_in') %}
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Shield<span>UPI</span></h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">Dashboard</a></li>
+                <li><a href="{{ url_for('upload') }}" class="{% if request.endpoint == 'upload' %}active{% endif %}">Train Model</a></li>
+                <li><a href="{{ url_for('detect') }}" class="{% if request.endpoint == 'detect' %}active{% endif %}">Detect Fraud</a></li>
+            </ul>
+            <div class="logout-container">
+                <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+            </div>
+        </nav>
+        {% endif %}
+
+        <main class="main-content {% if not session.get('logged_in') %}full-width{% endif %}">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="flash-messages">
+                {% for category, message in messages %}
+                  <div class="flash align-center flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

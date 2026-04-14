@@ -1,0 +1,6 @@
+transaction_hour,transaction_day,transaction_month,transaction_year,transaction_exact_time,transaction_amount,upi_number,account_holder_name,seller_name,user_dob,user_state,zip_pin_code,transaction_category,is_fraud
+14,12,5,2023,52400,1250.50,test1@upi,Alice Smith,Cafe Mocha,1990-05-14,12,400001,1,0
+3,4,11,2023,12500,85000.00,test2@upi,Bob Johnson,CryptoExchange,1985-08-22,5,110001,30,1
+19,25,1,2024,68400,250.00,test3@upi,Charlie Brown,Local Mart,1995-12-01,15,600001,12,0
+2,15,8,2023,8500,95000.00,test4@upi,Diana Prince,UnknownUser,1988-02-18,22,500001,0,1
+18,30,6,2023,65000,5600.00,test5@upi,Eve Davis,FitGym,2001-07-30,8,700001,50,0
