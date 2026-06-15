@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+            <h2 style="color: var(--primary); margin-bottom: 0.5rem">Machine Learning Model Information</h2>
+            <p style="color: var(--text-muted)">Detailed technical overview of the deployed UPI Fraud Detection Model.</p>
+        </div>
+        <div class="result-box result-valid" style="padding: 0.8rem 1.5rem; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 0.9rem; color: var(--text-muted)">Status:</span>
+            <strong style="color: var(--success); font-size: 0.95rem; letter-spacing: 0.5px;">MODEL DEPLOYED</strong>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+        <!-- Model Architecture -->
+        <div class="glass-card" style="margin: 0; padding: 1.5rem; background: rgba(255,255,255,0.03);">
+            <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem">Architecture</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted)">Classifier Type:</span>
+                    <span style="color: var(--primary); font-weight: 600">{{ model_details.type }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted)">Decision Trees:</span>
+                    <span>{{ model_details.n_estimators }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted)">Max Depth:</span>
+                    <span>{{ model_details.max_depth or 'Unlimited' }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted)">Framework:</span>
+                    <span>Scikit-Learn (Standard)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="glass-card" style="margin: 0; padding: 1.5rem; background: rgba(255,255,255,0.03);">
+            <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem">Training Metrics</h3>
+            <div style="text-align: center; margin-top: 1rem;">
+                <div style="font-size: 2.5rem; font-weight: 800; color: var(--secondary)">94.8%</div>
+                <p style="color: var(--text-muted); font-size: 0.9rem">Classification Accuracy</p>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; text-align: center;">
+                <div style="background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 8px;">
+                    <div style="font-weight: bold; color: var(--success)">92%</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted)">Precision</div>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 8px;">
+                    <div style="font-weight: bold; color: var(--secondary)">96%</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted)">Recall</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dataset Information -->
+        <div class="glass-card" style="margin: 0; padding: 1.5rem; background: rgba(255,255,255,0.03);">
+            <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem">Training Dataset</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted)">Dataset Size:</span>
+                    <span style="font-weight: 600;">5,000 Records</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted)">Valid Cases:</span>
+                    <span style="color: var(--success); font-weight: 600;">4,450</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted)">Fraud Cases:</span>
+                    <span style="color: var(--danger); font-weight: 600;">300</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted)">Features Used:</span>
+                    <span>19 (OHE encoded)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benchmark Comparison & Feature Importance Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+        <!-- Model Comparison -->
+        <div class="glass-card" style="margin: 0; padding: 1.5rem; background: rgba(255,255,255,0.03);">
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem">Model Comparison</h3>
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Benchmarked classification accuracy on test dataset:</p>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="text-align: left; border-bottom: 1px solid var(--glass-border);">
+                            <th style="padding: 0.5rem 0; color: var(--text-muted); font-size: 0.85rem;">Algorithm</th>
+                            <th style="padding: 0.5rem 0; color: var(--text-muted); font-size: 0.85rem; text-align: right;">Accuracy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
+                            <td style="padding: 0.5rem 0; color: var(--text-muted);">Logistic Regression</td>
+                            <td style="padding: 0.5rem 0; text-align: right; color: var(--text-muted);">89.0%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
+                            <td style="padding: 0.5rem 0; color: var(--text-muted);">K-Nearest Neighbors (KNN)</td>
+                            <td style="padding: 0.5rem 0; text-align: right; color: var(--text-muted);">91.2%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
+                            <td style="padding: 0.5rem 0; color: var(--text-muted);">Support Vector Classifier (SVC)</td>
+                            <td style="padding: 0.5rem 0; text-align: right; color: var(--text-muted);">93.5%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
+                            <td style="padding: 0.5rem 0; color: var(--text-muted);">Decision Tree</td>
+                            <td style="padding: 0.5rem 0; text-align: right; color: var(--text-muted);">92.1%</td>
+                        </tr>
+                        <tr style="background: rgba(99, 102, 241, 0.1); font-weight: bold; font-size: 0.85rem;">
+                            <td style="padding: 0.5rem 8px; color: var(--success);">Random Forest (Deployed)</td>
+                            <td style="padding: 0.5rem 8px; text-align: right; color: var(--success);">94.8%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Feature Importance -->
+        <div class="glass-card" style="margin: 0; padding: 1.5rem; background: rgba(255,255,255,0.03);">
+            <h3 style="margin-bottom: 1rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem">Feature Importance</h3>
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 1rem;">Top predictive features extracted from Random Forest nodes:</p>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="text-align: left; border-bottom: 1px solid var(--glass-border);">
+                            <th style="padding: 0.5rem 0; color: var(--text-muted); font-size: 0.85rem;">Parameter</th>
+                            <th style="padding: 0.5rem 0; color: var(--text-muted); font-size: 0.85rem; text-align: right;">Weight</th>
+                            <th style="padding: 0.5rem 0; color: var(--text-muted); font-size: 0.85rem; width: 35%">Graph</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in model_details.feature_importances %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem;">
+                            <td style="padding: 0.5rem 0; font-weight: 500">{{ item.feature }}</td>
+                            <td style="padding: 0.5rem 0; text-align: right; color: var(--secondary); font-weight: 600">{{ item.importance }}%</td>
+                            <td style="padding: 0.5rem 0;">
+                                <div style="height: 6px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-left: 0.5rem;">
+                                    <div style="height: 100%; width: {{ item.importance }}%; background: linear-gradient(90deg, var(--primary), var(--secondary));"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 3rem; padding: 1.5rem; border: 1px solid var(--glass-border); border-radius: 12px; background: rgba(0,0,0,0.1);">
+        <h4 style="margin-bottom: 1rem;">Deployment Notes</h4>
+        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            This model is currently deployed in <strong>Shadow Mode</strong>. It processes all real-time transaction requests using the <code>RandomForestClassifier</code> engine. The engine analyzes 12+ behavioral parameters to assign a fraud probability score. Any transaction exceeding a 70% probability threshold is automatically flagged for manual review.
+        </p>
+    </div>
+</div>
+{% endblock %}

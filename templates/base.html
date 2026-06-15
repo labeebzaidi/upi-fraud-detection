@@ -17,7 +17,7 @@
             </div>
             <ul class="nav-links">
                 <li><a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">Dashboard</a></li>
-                <li><a href="{{ url_for('upload') }}" class="{% if request.endpoint == 'upload' %}active{% endif %}">Train Model</a></li>
+                <li><a href="{{ url_for('model_info') }}" class="{% if request.endpoint == 'model_info' %}active{% endif %}">Model Information</a></li>
                 <li><a href="{{ url_for('detect') }}" class="{% if request.endpoint == 'detect' %}active{% endif %}">Detect Fraud</a></li>
             </ul>
             <div class="logout-container">

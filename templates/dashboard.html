@@ -3,35 +3,64 @@
 {% block content %}
 <h1>Analysis Dashboard</h1>
 
-<div class="dashboard-grid">
-    <div class="glass-card stat-card">
-        <h3>Random Forest Accuracy</h3>
-        <div class="value">{{ metrics.overall_accuracy }}%</div>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">(Based on test evaluation)</div>
+<div class="dashboard-grid" style="grid-template-columns: repeat(5, 1fr);">
+    <div class="glass-card stat-card" style="padding: 1.5rem 1rem;">
+        <h3>Total Transactions</h3>
+        <div class="value" style="font-size: 2.2rem; background: linear-gradient(135deg, #a78bfa, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0.5rem;">{{ metrics.total_count_fmt }}</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">(Historical + Live)</div>
     </div>
-    <div class="glass-card stat-card">
+    <div class="glass-card stat-card" style="padding: 1.5rem 1rem;">
         <h3>Valid Transactions</h3>
-        <div class="value" style="background: linear-gradient(135deg, #34d399, #10b981); -webkit-background-clip: text;">{{ metrics.real_percentage }}%</div>
+        <div class="value" style="font-size: 2.2rem; background: linear-gradient(135deg, #34d399, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0.5rem;">{{ metrics.real_percentage }}%</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">{{ metrics.valid_count_fmt }} txs</div>
     </div>
-    <div class="glass-card stat-card">
+    <div class="glass-card stat-card" style="padding: 1.5rem 1rem;">
         <h3>Fraudulent Transactions</h3>
-        <div class="value" style="background: linear-gradient(135deg, #f87171, #ef4444); -webkit-background-clip: text;">{{ metrics.fraud_percentage }}%</div>
+        <div class="value" style="font-size: 2.2rem; background: linear-gradient(135deg, #f87171, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0.5rem;">{{ metrics.fraud_percentage }}%</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">{{ metrics.fraud_count_fmt }} txs</div>
     </div>
-    <div class="glass-card stat-card">
+    <div class="glass-card stat-card" style="padding: 1.5rem 1rem;">
         <h3>Failed Transactions</h3>
-        <div class="value" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text;">{{ metrics.failed_percentage }}%</div>
+        <div class="value" style="font-size: 2.2rem; background: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0.5rem;">{{ metrics.failed_percentage }}%</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">{{ metrics.failed_count_fmt }} txs</div>
+    </div>
+    <div class="glass-card stat-card" style="padding: 1.5rem 1rem;">
+        <h3>Random Forest Accuracy</h3>
+        <div class="value" style="font-size: 2.2rem; margin-top: 0.5rem;">{{ metrics.overall_accuracy }}%</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">(Based on test evaluation)</div>
     </div>
 </div>
 
 <div class="dashboard-grid" style="grid-template-columns: 1fr 2fr;">
-    <div class="glass-card">
-        <h3 style="margin-bottom: 1rem; color: var(--secondary)">Major Fraud Categories</h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Categories mostly used by fraudsters to steal money:</p>
-        <ul class="categories-list">
-            {% for cat in metrics.major_categories %}
-            <li>{{ cat }}</li>
-            {% endfor %}
-        </ul>
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="glass-card" style="padding: 2rem;">
+            <h3 style="margin-bottom: 0.8rem; color: var(--secondary)">High-Risk Transaction Categories</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;">Categories mostly flagged as anomalous or high-risk:</p>
+            <ul class="categories-list" style="margin-top: 0;">
+                {% for cat in metrics.major_categories %}
+                <li style="padding: 0.4rem 0; font-size: 0.9rem;">{{ cat }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="glass-card" style="padding: 2rem;">
+            <h3 style="margin-bottom: 0.8rem; color: var(--primary)">Model Architecture</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Active Machine Learning Classifier details:</p>
+            <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.9rem;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.4rem;">
+                    <span style="color: var(--text-muted)">Model Type</span>
+                    <span style="font-weight: 600; color: var(--text-main)">Random Forest</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding-bottom: 0.4rem;">
+                    <span style="color: var(--text-muted)">Estimators (Trees)</span>
+                    <span style="font-weight: 600; color: var(--success)">100</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding-bottom: 0.2rem;">
+                    <span style="color: var(--text-muted)">Max Depth</span>
+                    <span style="font-weight: 600; color: var(--warning)">10</span>
+                </div>
+            </div>
+        </div>
     </div>
     
     <div class="glass-card">

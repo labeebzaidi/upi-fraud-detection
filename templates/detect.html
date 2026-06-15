@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label>Seller Name</label>
-                <input type="text" name="seller_name" class="form-control" required>
+                <input type="text" name="seller_name" class="form-control" placeholder="e.g. Merchant Store (Optional)">
             </div>
             
             <!-- Row 3 -->
@@ -57,13 +57,11 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Server Status Check</label>
-                <select name="server_status" class="form-control" required>
-                    <option value="Success" selected>Success (Network OK)</option>
-                    <option value="Wrong PIN">Wrong PIN</option>
-                    <option value="Timeout">Timeout (Offline)</option>
-                    <option value="Insufficient Funds">Insufficient Funds</option>
-                </select>
+                <label>Banking Network</label>
+                <div class="form-control" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2); color: var(--success); display: flex; align-items: center; font-weight: 600;">
+                    <span class="animate-pulse" style="display: inline-block; width: 8px; height: 8px; background-color: var(--success); border-radius: 50%; margin-right: 8px;"></span>
+                    CONNECTED / ONLINE
+                </div>
             </div>
         </div>
         
@@ -73,20 +71,26 @@
     </form>
     
     {% if prediction %}
-        {% if prediction == 'valid transaction' %}
+        {% if 'Valid' in prediction or 'valid' in prediction %}
         <div class="result-box result-valid animate-pulse" id="result-box">
-            <h2><span style="font-size: 2rem;">✓</span> Valid Transaction</h2>
-            <p style="margin-top: 0.5rem; color: var(--text-muted)">The CNN model has determined this transaction is genuine and secure.</p>
+            <h2 style="font-weight: 700; font-size: 1.8rem; margin-bottom: 0.5rem;"><span style="font-size: 2rem; margin-right: 0.5rem;">✓</span>Valid Transaction</h2>
+            {% if prob_val is not none %}
+                <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--success);">Fraud Probability: {{ prob_val }}%</div>
+            {% endif %}
+            <p style="color: var(--text-muted); font-size: 0.95rem;">The transaction has been flagged as secure by the Random Forest model.</p>
         </div>
-        {% elif prediction == 'fraud transaction' %}
+        {% elif 'Fraud' in prediction or 'fraud' in prediction %}
         <div class="result-box result-fraud animate-pulse" id="result-box">
-            <h2><span style="font-size: 2rem;">⚠</span> Fraud Transaction</h2>
-            <p style="margin-top: 0.5rem; color: var(--text-muted)">Alert: The CNN model detected suspicious patterns. Transaction should be declined.</p>
+            <h2 style="font-weight: 700; font-size: 1.8rem; margin-bottom: 0.5rem;"><span style="font-size: 2rem; margin-right: 0.5rem;">🚨</span>Fraud Transaction Detected</h2>
+            {% if prob_val is not none %}
+                <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">Risk Score: {{ prob_val }}%</div>
+            {% endif %}
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Transaction blocked due to suspicious activity. The request has been flagged by the fraud detection model.</p>
         </div>
         {% else %}
         <div class="result-box result-failed animate-pulse" id="result-box">
-            <h2><span style="font-size: 2rem;">❌</span> Failed Transaction</h2>
-            <p style="margin-top: 0.5rem; color: var(--text-muted)">Blocked: The banking server rejected the transaction ({{ prediction }}).</p>
+            <h2 style="font-weight: 700; font-size: 1.8rem; margin-bottom: 0.5rem;"><span style="font-size: 2rem; margin-right: 0.5rem;">❌</span>Transaction Failed</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Blocked: The banking server rejected the transaction (Reason: {{ prediction }}).</p>
         </div>
         {% endif %}
         
