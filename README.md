@@ -175,25 +175,6 @@ python app.py
 
 ---
 
-## 📸 Screenshots
-
-### Dashboard
-
-> Add your dashboard screenshot here
-
----
-
-### Model Information
-
-> Add your model information screenshot here
-
----
-
-### Fraud Detection
-
-> Add your fraud detection screenshot here
-
----
 
 ## 🎯 Future Improvements
 
